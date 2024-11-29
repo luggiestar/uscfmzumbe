@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-ahsfl0yd45nsxwldj)(rl4+o-gnil215^no0hc62fw_q!i#te9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "212.47.66.19"]
 
 # Application definition
 
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'registration.apps.RegistrationConfig',
     'django_forms_bootstrap',
     'django_select2',
-    'widget_tweaks',
     'django.contrib.humanize'
 ]
 
@@ -82,27 +81,27 @@ WSGI_APPLICATION = 'uscfmzumbe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'uscf',
-        'USER': 'root',
-        'PASSWORD': '1122',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
+     }
 }
+
+#DATABASES = {
+   # 'default': {
+       # 'ENGINE': 'django.db.backends.mysql',
+       # 'NAME': 'uscf',
+        #'USER': 'root',
+        #'PASSWORD': '1122',
+       # 'HOST': '127.0.0.1',
+      #  'PORT': '3306',
+     #   'OPTIONS': {
+    #        'sql_mode': 'traditional',
+   #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+  #      }
+ #   }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
