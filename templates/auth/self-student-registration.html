@@ -1,0 +1,73 @@
+{% extends 'auth/auth-base.html' %}
+{% block title %} User registration {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="mt-lg-5 mb-4">
+                <div class="card card-body shadow-sm">
+                    <div class="pb-2">
+                        <div class="login-logo-size m-auto">
+                            <img src="{% static 'images/logo/logo.png' %}" width="100%" alt="logo">
+                        </div>
+                        <p class="text-center mt-2"><small>University Student Christian Fellowship</small></p>
+                    </div>
+                    {% include 'includes/messages.html' %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input type="text" name="username" id="username" placeholder="username"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fa fa-lock"></i></span>
+                                </div>
+                                <input type="password" name="password" id="password" placeholder="password"
+                                       class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <button type="submit" name="login" id="submitLogin"
+                                    class="btn btn-blue-main btn-sm btn-block"> Login
+                            </button>
+                        </div>
+                        <p class="text-center"><small>powered by <strong class="text-blue-main">UICT</strong>
+                            2023</small></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <div id="charts"></div>
+    <script>
+        let options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: 'sales',
+                data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+            }],
+            xaxis: {
+                categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+            },
+
+            fill: {
+                colors: ['#F44336', '#E91E63', '#9C27B0']
+            }
+        }
+
+        let chart = new ApexCharts(document.querySelector("#chart"), options);
+
+        chart.render();
+    </script>
+{% endblock %}

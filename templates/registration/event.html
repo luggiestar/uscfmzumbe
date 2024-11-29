@@ -1,0 +1,116 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Event {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load custom_filters %}
+{% load humanize %}
+{% block content %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold"><i class="fa fa-table"> </i> Event</h6>
+            <button class="btn btn-sm btn-blue-main rounded-0 " data-toggle="modal" data-target="#newEvent">
+                Add event <i class="fa fa-plus text-yellow-main"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Title</th>
+                        <th>Location</th>
+                        <th>Projection (Tsh.)</th>
+                        <th>Committee Fee (Tsh.)</th>
+                        <th>Member fee (Tsh.)</th>
+                        <th>Event date</th>
+                        <th>Start time</th>
+                        <th>End time</th>
+                        <th width="9%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.location }}</td>
+                            <td>{{ event.projection|intcomma }}</td>
+                            <td>{{ event.committee_amount|intcomma }}</td>
+                            <td>{{ event.member_amount|intcomma }}</td>
+                            <td>{{ event.event_date }}</td>
+                            <td>{{ event.start_time }}</td>
+                            <td>{{ event.end_time }}</td>
+                            <td>
+                                <span class="bg-warning text-dark badge" type="button" data-toggle="modal"
+                                      data-target="#edit{{ event.id }}"><i class="fa fa-edit p-1"></i></span>
+                                <a href="{% url 'event_bills' event.id %}" class="bg-success text-light badge">
+                                    <i class="fa fa-money-bill p-1"></i>
+                                </a>
+                                <a href="{% url 'event_committee' event.id %}" class="bg-info text-white badge">
+                                    <i class="fa fa-users p-1"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="edit{{ event.id }}">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Update event {{ event.name }}</b>
+                                    </div>
+                                    <form method="post" action="{% url 'update_event' %}">
+                                        <div class="modal-body">
+                                            enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                {{ edit_event_forms|get_item:event.id|as_bootstrap }}
+                                            </div>
+                                            <input hidden type="number" name="event_id" value="{{ event.id }}"
+                                                   readonly
+                                                   required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-blue-main mt-3 rounded-0 btn-sm">Save Changes
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newEvent">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-blue-main text-light">
+                    <b>Create new event</b>
+                </div>
+                <form method="post" action="" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            {{ form|as_bootstrap }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-blue-main rounded-0 btn-sm">Save event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".form-group").addClass("col-md-6");
+        $("#div_id_title").addClass("col-md-12");
+        $("#div_id_description").addClass("col-md-12");
+    </script>
+{% endblock %}

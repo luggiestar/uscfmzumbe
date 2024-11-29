@@ -1,0 +1,103 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} student bills {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load custom_filters %}
+{% load humanize %}
+{% block content %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+            <p><i class="fa fa-table"></i> Student Bill</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Student</th>
+                        <th>Programme</th>
+                        <th>Bill Type</th>
+                        <th>bill Amount(Tsh.)</th>
+                        <th>Paid Amount(Tsh.)</th>
+                        <th>Semester</th>
+                        <th>Year</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th width="9%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student_bill in student_bills %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ student_bill.student.user.first_name|title }}
+                                {{ student_bill.student.user.last_name|title }}
+                            </td>
+                            <td>{{ student_bill.student.programme.abb }}</td>
+                            <td>{{ student_bill.bill.name }}</td>
+                            <td>{{ student_bill.bill.amount|intcomma }}</td>
+                            <td>{{ student_bill.paid_amount|intcomma }}</td>
+                            <td>{{ student_bill.bill.semester.name|title }}</td>
+                            <td>{{ student_bill.bill.semester.year }}</td>
+                            <td>
+                                {% if student_bill.status == "unpaid" %}
+                                    <span class="badge bg-gradient-danger text-white">{{ student_bill.status }}</span>
+                                {% elif student_bill.status == "partial payment" %}
+                                    <span class="badge bg-gradient-warning text-dark">{{ student_bill.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-gradient-success text-white">{{ student_bill.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ student_bill.created }}</td>
+                            <td>
+                                <span type="button" class="badge bg-primary text-white" data-toggle="modal"
+                                      data-target="#addPayment{{ student_bill.id }}">Add payment <i
+                                        class="fa fa-plus-circle"></i>
+                                </span>
+                            </td>
+                        </tr>
+
+                        {# add payment modal #}
+                        <div class="modal fade" id="addPayment{{ student_bill.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Add payment for {{ student_bill.student.user.first_name }}
+                                            {{ student_bill.student.user.last_name }}</b>
+                                    </div>
+                                    <form method="post" action="{% url 'save_payment' %}"
+                                          enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            {% if student_bill.status == "paid" %}
+                                                <div class="shadow border-left-warning p-2 text-dark mb-3">
+                                                    This member all ready paid for this bill, the added amount is
+                                                    non-refundable and non-transferable.
+                                                </div>
+                                            {% endif %}
+                                            {% csrf_token %}
+                                            {{ StudentPaymentForm|as_bootstrap }}
+                                            <input hidden type="number" name="student_bill_id"
+                                                   value="{{ student_bill.id }}"
+                                                   readonly required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-danger" data-dismiss="modal"
+                                                    aria-label="Close">Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-blue-main">Save payment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

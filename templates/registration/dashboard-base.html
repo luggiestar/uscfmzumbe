@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="USCF member registration system">
+    <meta name="author" content="USCF">
+    <link rel="icon" href="{% static 'images/logo/logo.png' %}" type="image/png">
+    <title>{% block title %} {% endblock title %}</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/uscf-css.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- datatable -->
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap4.min.css" rel="stylesheet">
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        a:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+<div id="overlay" class="d-none">
+    <div class="custom-loader">
+        Loading....
+    </div>
+</div>
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-blue-main sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+            <div class="sidebar-brand-icon rounded">
+
+            </div>
+            <div class="sidebar-brand-text mx-3 text-yellow-main">USCF MEMBERSHIP</div>
+        </a>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+                <i class="fas fa-fw fa-tachometer-alt text-yellow-main"></i>
+                <span>Dashboard</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#student"
+               aria-expanded="true" aria-controls="student">
+                <i class="fas fa-fw fa-graduation-cap text-yellow-main"></i>
+                <span>Student Managements</span>
+            </a>
+            <div id="student" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Users:</h6>
+                    <a class="collapse-item" href="{% url 'positions' %}">Positions</a>
+                    <a class="collapse-item" href="{% url 'users' %}">users</a>
+                    <a class="collapse-item" href="{% url 'students' %}">Students</a>
+                    <a class="collapse-item" href="{% url 'filter_member' 'associate' %}">Associate</a>
+                    <a class="collapse-item" href="{% url 'committee' %}">Committees</a>
+                    <a class="collapse-item" href="{% url 'student_committee' %}">Member Committee</a>
+                </div>
+            </div>
+        </li>
+
+        {# academic #}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#academic"
+               aria-expanded="true" aria-controls="academic">
+                <i class="fas fa-fw fa-book text-yellow-main"></i>
+                <span>Academic Managements</span>
+            </a>
+            <div id="academic" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Academic:</h6>
+                    <a class="collapse-item" href="{% url 'year' %}">Academic Year</a>
+                    <a class="collapse-item" href="{% url 'semester' %}">Academic Semester</a>
+                    <a class="collapse-item" href="{% url 'unit' %}">Unit</a>
+                    <a class="collapse-item" href="{% url 'department' %}">Department</a>
+                    <a class="collapse-item" href="{% url 'programme' %}">Programme</a>
+                </div>
+            </div>
+        </li>
+
+        {# Payments #}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#payment"
+               aria-expanded="true" aria-controls="payment">
+                <i class="fas fa-fw fa-wallet text-yellow-main"></i>
+                <span>Payment Managements</span>
+            </a>
+            <div id="payment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">payments:</h6>
+                    <a class="collapse-item" href="{% url 'bills' %}">Bills</a>
+                    <a class="collapse-item" href="{% url 'student_bills' %}">Student Bill</a>
+                    <a class="collapse-item" href="{% url 'student_bill_payments' %}">Student Bills Payment</a>
+                    <a class="collapse-item" href="{% url 'accounts' %}">Accounts</a>
+                </div>
+            </div>
+        </li>
+
+        {# Events #}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#event"
+               aria-expanded="true" aria-controls="event">
+                <i class="fas fa-fw fa-cash-register text-yellow-main"></i>
+                <span>Event Managements</span>
+            </a>
+            <div id="event" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Event:</h6>
+                    <a class="collapse-item" href="{% url 'events' %}">Event</a>
+                    <a class="collapse-item" href="{% url 'student_bill_payments' %}">Event Committee</a>
+                    <a class="collapse-item" href="{% url 'student_event_bills' %}">Student event Bill</a>
+                    <a class="collapse-item" href="{% url 'event_collection' %}">Event collection</a>
+                </div>
+            </div>
+        </li>
+
+        {# leader #}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#leader"
+               aria-expanded="true" aria-controls="leader">
+                <i class="fas fa-fw fa-user-check text-yellow-main"></i>
+                <span>Leaders Management</span>
+            </a>
+            <div id="leader" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Leader:</h6>
+                    <a class="collapse-item" href="">Current Excom</a>
+                    <a class="collapse-item" href="">Formal Excom</a>
+                    <a class="collapse-item" href="">Current Committee Leader</a>
+                    <a class="collapse-item" href="">Formal Committee Leader</a>
+                    <a class="collapse-item" href="">Current Leaders</a>
+                    <a class="collapse-item" href="">Formal Leaders</a>
+                </div>
+            </div>
+        </li>
+
+        {# Offerings #}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#offerings"
+               aria-expanded="true" aria-controls="offerings">
+                <i class="fas fa-fw fa-money-bill text-yellow-main"></i>
+                <span>Offerings Management</span>
+            </a>
+            <div id="offerings" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Offerings:</h6>
+                    <a class="collapse-item" href="">Daily Offering</a>
+                    <a class="collapse-item" href="">Weekly Report</a>
+                    <a class="collapse-item" href="">Monthly Report</a>
+                    <a class="collapse-item" href="">Search Report</a>
+                </div>
+            </div>
+        </li>
+
+
+        <!-- Nav Item - logout -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_password' %}">
+                <i class="fas fa-fw fa-unlock-alt text-yellow-main"></i>
+                <span>Change Password</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">
+                <i class="fas fa-fw fa-sign-out-alt text-yellow-main"></i>
+                <span>Logout</span></a>
+        </li>
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <div class="d-flex justify-content-between">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-2">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <button class="btn btn-link rounded-circle mobile" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fa fa-sign-out-alt"></i>
+                    </button>
+                    <div class="topbar-divider mobile"></div>
+                    <h5 class="font-weight-bolder text-blue-main pt-4 pb-3">
+                        University Student Cristian Fellowship (USCF)
+                    </h5>
+
+                </div>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    {{ request.user.first_name }} {{ request.user.last_name }}
+                                </span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-blue-main"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                {% include 'includes/messages.html' %}
+                {% block content %}
+                {% endblock %}
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center text-yellow-main my-auto">
+                    <span class="text-muted">Copyright &copy; designed & developed by <b class="text-blue-main">UICT</b> <span
+                            id="copyLightYear"></span></span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-yellow-main btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-green-main btn-sm" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- select2 script-->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/uscf-js.min.js' %}"></script>
+
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+<script>
+
+    $(document).ready(function () {
+        $(".form-control").addClass("line-form")
+        $("select").addClass("line-form")
+
+        let overlay = $('#overlay')
+
+        // {# start loader #}
+        overlay.removeClass('d-none')
+        overlay.addClass('d-block')
+
+        {# remove form-control class from checkbox#}
+        $('input[type="checkbox"]').removeClass("form-control");
+
+        // {# stop loader #}
+        overlay.addClass('d-none')
+        overlay.removeClass('d-block')
+
+
+        let current_year = new Date().getFullYear();
+        $("#copyLightYear").text(current_year)
+
+        // enable select two option
+        $('.django-select2 ').select2({
+            width: '100%',
+            placeholder: 'Select an option',
+            allowClear: true,
+            padding: '50rem',
+        });
+    });
+</script>
+
+</body>
+
+</html>

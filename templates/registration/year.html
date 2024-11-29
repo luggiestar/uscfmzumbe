@@ -1,0 +1,114 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Years {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% block content %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-table"> </i> Year</h6>
+            <button class="btn btn-sm btn-blue-main rounded-0 " data-toggle="modal" data-target="#newYear">
+                Add Year <i class="fa fa-plus text-yellow-main"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Semester</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th width="9%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for year in years %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ year.name }}</td>
+                            <td>{{ year.created }}</td>
+                            <td>{{ year.updated }}</td>
+                            <td>
+                                <span class="fa fa-edit text-warning" type="button" data-toggle="modal"
+                                      data-target="#edit{{ year.id }}"></span>
+                                <span class="fa fa-trash text-danger" type="button" data-toggle="modal"
+                                      data-target="#delete{{ year.id }}"></span>
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="edit{{ year.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Update year {{ year.name }}</b>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{% url 'update_year' %}"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input hidden type="number" name="year_id" value="{{ year.id }}" readonly
+                                                   required>
+                                            <input type="text" name="name" value="{{ year.name }}" class="form-control"
+                                                   required>
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-blue-main mt-3 rounded-0 btn-sm">Save Changes
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# delete modal #}
+                        <div class="modal fade" id="delete{{ year.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Delete Year {{ year.name }}</b>
+                                    </div>
+                                    <form method="post" action="{% url 'delete_year' %}" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            Are your sure you want to delete {{ year.name }}
+                                            {% csrf_token %}
+                                            <input hidden type="number" name="year_id" value="{{ year.id }}" readonly
+                                                   required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-sm btn-danger" data-dismiss="modal"
+                                                    aria-label="Close">Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-sm btn-blue-main rounded-0 btn-sm">Yes
+                                                delete
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newYear">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue-main text-light">
+                    <b>Create new Academic Year</b>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|as_bootstrap }}
+                        <button type="submit" class="btn btn-sm btn-blue-main rounded-0 btn-sm">Save Year</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

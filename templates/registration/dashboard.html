@@ -1,0 +1,78 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Dashboard {% endblock title %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class=" shadow-sm">
+                <div class="card-body">
+                    <canvas id="facultySummaryId" width="100%" height="80%"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <canvas id="pieChart" width="300" height="300"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        const facultySummaryId = document.getElementById('facultySummaryId');
+        facultySummary(facultySummaryId)
+        let data = {
+            labels: ['Male {{gender_summary.0.1}}', 'Female {{gender_summary.1.1}}'],
+            datasets: [{
+                data: [ {{gender_summary.0.1}}, {{gender_summary.1.1}} ], // Example data, replace with your actual data
+                backgroundColor: ['rgba(99,130,255,0.68)', 'rgba(255,99,247,0.2)']
+            }]
+        };
+
+        let options = {
+            responsive: true
+        };
+
+        let myPieChart = new Chart(pieChart, {
+            type: 'pie',
+            data: data,
+            options: options
+        });
+
+    });
+
+    function facultySummary(ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for item in faculty_summary %} '{{ item.0 }}', {% endfor %}],
+                datasets: [{
+                    label: '# Faculty',
+                    data: [{% for item in faculty_summary %} {{ item.1 }}, {% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(99,255,219,0.2)',
+                        'rgba(99,130,255,0.2)',
+                        'rgba(238,220,32,0.2)',
+                        'rgba(255,99,247,0.2)',
+                        'rgba(5,9,66,0.2)',
+                        'rgba(135,185,10,0.42)',
+                        'rgba(19,68,66,0.36)',
+                        'rgba(217,66,9,0.57)',
+                        'rgba(185,144,10,0.2)',
+                        'rgba(10,185,159,0.2)',
+                        'rgba(95,3,121,0.4)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

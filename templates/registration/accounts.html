@@ -1,0 +1,48 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Accounts {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load custom_filters %}
+{% load humanize %}
+{% block content %}
+    <div class="card shadow border-left-warning mb-2">
+        <p class="pl-3 pt-3"><i class="fa fa-exclamation-triangle text-warning"></i><b>The list of account bellow is a summary of collection of each bill
+            and the mail account shows the total amount collected for each bill.</b></p>
+    </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+            <p><i class="fa fa-table"></i> Accounts </p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Name</th>
+                        <th>Balance(Tsh.)</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th width="9%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for account in accounts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ account.name }}</td>
+                            <td>{{ account.balance|intcomma }}</td>
+                            <td>{{ account.created }}</td>
+                            <td>{{ account.updated }}</td>
+                            <td>
+                                no action
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

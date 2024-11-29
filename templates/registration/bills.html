@@ -1,0 +1,112 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Bills {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load custom_filters %}
+{% load humanize %}
+{% block content %}
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+            <p><i class="fa fa-table"></i> Bills </p>
+            <div class="d-flex">
+                <button class="btn btn-sm btn-blue-main rounded-0" data-toggle="modal" data-target="#addBill">
+                    Add bill <i class="fa fa-plus text-yellow-main"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Type</th>
+                        <th>Amount(Tsh.)</th>
+                        <th>Semester</th>
+                        <th>Year</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th width="9%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bill in bills %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ bill.name }}</td>
+                            <td>{{ bill.amount|intcomma }}</td>
+                            <td>
+                                {{ bill.semester.name|title }}
+                                {% if bill.semester.is_current %}
+                                    <span class="badge bg-success text-white">active</span>
+                                {% else %}
+                                    <span class="badge bg-info text-white">inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ bill.semester.year }}</td>
+                            <td>{{ bill.created }}</td>
+                            <td>{{ bill.updated }}</td>
+                            <td>
+                                {% if bill.name == "Fee" %}
+                                    <button class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                            data-target="#generateBill{{ bill.id }}">
+                                        Generate bill
+                                    </button>
+                                {% else %}
+                                    no action
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="generateBill{{ bill.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Generate bill</b>
+                                    </div>
+                                    <form method="post" action="{% url 'generate_bill' %}">
+                                        <div class="modal-body">
+                                            <p>
+                                                The generated bill will be generated to all student who does not has
+                                                this bill. are you sure you want to generate bill?
+                                            </p>
+                                            {% csrf_token %}
+                                            <input hidden type="number" name="bill_id" value="{{ bill.id }}" readonly
+                                                   required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-sm btn-blue-main rounded-0">
+                                                Yes generate bill
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addBill">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue-main text-light">
+                    <b>Create new bill</b>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|as_bootstrap }}
+                        <button type="submit" class="btn btn-sm btn-blue-main rounded-0">Save bill</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

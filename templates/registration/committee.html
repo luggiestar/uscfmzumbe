@@ -1,0 +1,85 @@
+{% extends 'registration/dashboard-base.html' %}
+{% block title %} Committee {% endblock title %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load custom_filters %}
+{% block content %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <i class="fa fa-table"></i>
+            <div class="d-flex">
+                <button class="btn btn-sm btn-blue-main rounded-0" data-toggle="modal" data-target="#newCommittee">
+                    Add Committee <i class="fa fa-plus text-yellow-main"></i>
+                </button>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered dt-responsive nowrap" id="dataTable" width="100%"
+                       cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Committee Name</th>
+                        <th>Committee Abbreviation</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in committee %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.abb }}</td>
+                            <td>
+                                <span class="fa fa-edit text-warning" data-target="#edit{{ c.id }}"
+                                      data-toggle="modal"></span>
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="edit{{ c.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-blue-main text-light">
+                                        <b>Create new Committee</b>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{% url 'update_committee' %}" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input hidden type="number" name="committee_id" value="{{ c.id }}"
+                                                   readonly required>
+                                            {{ edit_committee_forms|get_item:c.id|as_bootstrap }}
+                                            <button type="submit" class="btn btn-sm btn-blue-main rounded-0">Save
+                                                Committee
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newCommittee">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue-main text-light">
+                    <b>Create new Committee</b>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ cf|as_bootstrap }}
+                        <button type="submit" class="btn btn-sm btn-blue-main rounded-0">Save Committee</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
