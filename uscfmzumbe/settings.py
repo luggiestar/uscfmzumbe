@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-ahsfl0yd45nsxwldj)(rl4+o-gnil215^no0hc62fw_q!i#te9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "212.47.66.19"]
+ALLOWED_HOSTS = ["127.0.0.1", "uscfmzumbe.co.tz", "www.uscfmzumbe.co.tz", "212.47.66.19"]
 
 # Application definition
 
@@ -55,9 +55,30 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'uscfmzumbe.urls'
 AUTH_USER_MODEL = 'registration.User'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-CSRF_TRUSTED_ORIGINS = ['https://uscfmzumbe.co.tz', 'https://www.uscfmzumbe.co.tz', 'http://127.0.0.1']
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://uscfmzumbe.co.tz",
+    "https://www.uscfmzumbe.co.tz",
+    "http://uscfmzumbe.co.tz",
+    "http://www.uscfmzumbe.co.tz",
+    "http://127.0.0.1",
+    "http://212.47.66.19",
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Set CSRF and Session Cookies
+CSRF_COOKIE_SECURE = not DEBUG  # Secure in production
+SESSION_COOKIE_SECURE = not DEBUG  # Secure in production
+
+# Automatically log out users when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = not DEBUG
+
+# Ensure cookies are not accessible via JavaScript (for better security)
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+
 
 TEMPLATES = [
     {
@@ -81,27 +102,27 @@ WSGI_APPLICATION = 'uscfmzumbe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
-     }
-}
-
 #DATABASES = {
-   # 'default': {
-       # 'ENGINE': 'django.db.backends.mysql',
-       # 'NAME': 'uscf',
-        #'USER': 'root',
-        #'PASSWORD': '1122',
-       # 'HOST': '127.0.0.1',
-      #  'PORT': '3306',
-     #   'OPTIONS': {
-    #        'sql_mode': 'traditional',
-   #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-  #      }
- #   }
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 #}
+
+DATABASES = {
+    'default': {
+       'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'uscfmzb',
+        'USER': 'ucsfshs',
+        'PASSWORD': '@!m2ub3',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -141,8 +162,8 @@ MEDIA_URL = 'media/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 if not DEBUG:
-    STATIC_ROOT = '/home/uscfmzum/uscf/staticfiles'
-    MEDIA_ROOT = '/home/uscfmzum/uscf/media'
+    STATIC_ROOT = '/var/www/django_project/uscf_mzumbe/uscfmzumbe/staticfiles'
+    MEDIA_ROOT = '/var/www/django_project/uscf_mzumbe/uscfmzumbe/media'
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

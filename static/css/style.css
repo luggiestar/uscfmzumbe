@@ -190,7 +190,6 @@
 }
 
 .header {
-    background-image: url("../images/bg/bg2.jpeg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -199,7 +198,6 @@
 }
 
 .water-mark {
-    background-image: url("../images/logo/logo.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-blend-mode: multiply;
